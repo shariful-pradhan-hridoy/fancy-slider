@@ -4,9 +4,9 @@ const galleryHeader = document.querySelector('.gallery-header');
 const searchBtn = document.getElementById('search-btn');
 const sliderBtn = document.getElementById('create-slider');
 const sliderContainer = document.getElementById('sliders');
+const selectionCounter = document.getElementById('selection-counter');
 // selected image 
 let sliders = [];
-
 
 // If this key doesn't work
 // Find the name in the url and go to their website
@@ -39,14 +39,14 @@ const showImages = (images) => {
 let slideIndex = 0;
 const selectItem = (event, img) => {
   let element = event.target;
-  element.classList.add('added');
-  console.log(element);
- 
   let item = sliders.indexOf(img);
   if (item === -1) {
+    element.classList.toggle('added');
     sliders.push(img);
+    selectionCounter.innerText = `You Have Selected ${sliders.length} Images`;
   } else {
     element.classList.toggle('added');
+    selectionCounter.innerText = `You Have Selected ${item} Images`;
   }
 }
 var timer
@@ -58,6 +58,7 @@ const createSlider = () => {
   }
   // crate slider previous next area
   sliderContainer.innerHTML = '';
+  selectionCounter.innerText = '';
   const prevNext = document.createElement('div');
   prevNext.className = "prev-next d-flex w-100 justify-content-between align-items-center";
   prevNext.innerHTML = ` 
@@ -126,7 +127,7 @@ document.getElementById('search').addEventListener("keyup", event => {if (event.
 
 
 sliderBtn.addEventListener('click', function () {
-  createSlider()
+  createSlider();
 })
 
 const toggleSpinner = (show) => {
