@@ -12,6 +12,14 @@ let sliders = [];
 // Find the name in the url and go to their website
 // to create your own api key
 const KEY = '20356763-e8797aba3ee43618aa9e79685';
+const getImages = (query) => {
+  const url = `https://pixabay.com/api/?key=${KEY}&q=${query}&image_type=photo&pretty=true`
+  toggleSpinner(true);
+  fetch(url)
+    .then(response => response.json())
+    .then(data => showImages(data.hits))
+    .catch(err => console.log(err))
+}
 
 // show images 
 const showImages = (images) => {
@@ -23,28 +31,22 @@ const showImages = (images) => {
     let div = document.createElement('div');
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
     div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
-    gallery.appendChild(div)
+    gallery.appendChild(div);
+    toggleSpinner(false);
   })
-
-}
-const getImages = (query) => {
-  fetch(`https://pixabay.com/api/?key=${KEY}&q=${query}&image_type=photo&pretty=true`)
-  // https://pixabay.com/api/?key=20356763-e8797aba3ee43618aa9e79685&q=yellow+flowers&image_type=photo
-    .then(response => response.json())
-    .then(data => showImages(data.hits))
-    .catch(err => console.log(err))
 }
 
 let slideIndex = 0;
 const selectItem = (event, img) => {
   let element = event.target;
   element.classList.add('added');
+  console.log(element);
  
   let item = sliders.indexOf(img);
   if (item === -1) {
     sliders.push(img);
   } else {
-    alert('Hey, Already added !')
+    element.classList.toggle('added');
   }
 }
 var timer
@@ -126,3 +128,14 @@ document.getElementById('search').addEventListener("keyup", event => {if (event.
 sliderBtn.addEventListener('click', function () {
   createSlider()
 })
+
+const toggleSpinner = (show) => {
+  const spinner = document.getElementById('loading-spinner');
+  // const 
+  if (show){
+    spinner.classList.remove('d-none');
+  }
+  else {
+      spinner.classList.add('d-none');
+  }
+}
